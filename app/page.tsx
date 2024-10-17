@@ -1,18 +1,16 @@
-
 import FileUpload from "@/app/components/FileUpload";
 
 export default function Home() {
-  return (
-
-      <div>
-
-        <h1 className='text-center text-3xl'> File Editor </h1>
-
-      <FileUpload></FileUpload>
-
-
-      </div>
-
-
-  );
+    return (
+        <div className="">
+            <div className="">
+                <h1 className="text-center text-4xl mt-4 mb-4">
+                    File Editor
+                </h1>
+                <div className='items-center '>
+                <FileUpload />
+                </div>
+            </div>
+        </div>
+    );
 }

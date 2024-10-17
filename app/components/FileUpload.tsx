@@ -23,10 +23,12 @@ const FileUpload: React.FC = () => {
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [selectedColor, setSelectedColor] = useState<string>('#ffeb3b');
     const [showComments, setShowComments] = useState<boolean>(true);
+    const [fileName, setFileName] = useState<string>(''); // New state for file name
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
+            setFileName(file.name); // Update the file name state
             const reader = new FileReader();
             reader.onload = () => {
                 const content = reader.result?.toString() || '';
@@ -78,7 +80,7 @@ const FileUpload: React.FC = () => {
         }
     };
 
-    // Updated downloadAsPDF function
+    // Updated downloadAsPDF function using JSON
     const downloadAsPDF = () => {
         // Prepare the JSON data
         const data = { latexCode: editorContent };
@@ -102,16 +104,17 @@ const FileUpload: React.FC = () => {
                 const url = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'document.pdf');
+                // Use the file name for the PDF if available
+                const pdfFileName = fileName ? fileName.replace(/\.[^/.]+$/, '') + '.pdf' : 'document.pdf';
+                link.setAttribute('download', pdfFileName);
                 document.body.appendChild(link);
                 link.click();
                 link.parentNode?.removeChild(link);
                 URL.revokeObjectURL(url);
             })
-
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred while generating the PDF.');
+                alert(`An error occurred while generating the PDF:\n${error.message}`);
             });
     };
 
@@ -160,7 +163,7 @@ const FileUpload: React.FC = () => {
             {fileContent && (
                 <button
                     onClick={() => setShowComments(!showComments)}
-                    className="fixed top-1/2 -right-4 transform -translate-y-1/2 bg-blue-500 text-white p-3 rounded-l-lg shadow-lg hover:bg-blue-600 z-50"
+                    className="fixed top-1/2 -right-4 transform -translate-y-1/2 bg-black text-white p-3 rounded-l-lg shadow-lg hover:bg-zinc-800 z-50"
                 >
                     <FaComments size={24} />
                 </button>
@@ -175,6 +178,13 @@ const FileUpload: React.FC = () => {
 
                 {fileContent && (
                     <div>
+                        {/* Display the file name */}
+                        {fileName && (
+                            <p className="text-black mb-2">
+                                <strong>File:</strong> {fileName}
+                            </p>
+                        )}
+
                         <h3 className="text-gray-800 mb-2 text-lg font-semibold">Edit Content:</h3>
                         <textarea
                             id="editor-textarea"
@@ -185,6 +195,10 @@ const FileUpload: React.FC = () => {
                         />
 
                         <h3 className="text-gray-800 mt-4 text-lg font-semibold">LaTeX Preview:</h3>
+                        {/* Instruction text */}
+                        <p className="text-gray-600 mb-2">
+                            To add a comment, highlight the text in the preview area.
+                        </p>
                         <div
                             id="latex-preview"
                             className="bg-white p-4 text-black border border-gray-300 rounded-lg shadow-sm"
@@ -203,7 +217,7 @@ const FileUpload: React.FC = () => {
                         {/* Button to download PDF */}
                         <button
                             onClick={downloadAsPDF}
-                            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 shadow-md"
+                            className="mt-4 bg-black text-white py-2 px-4 rounded-lg hover:bg-zinc-800 shadow-md"
                         >
                             Download as PDF
                         </button>
@@ -222,8 +236,9 @@ const FileUpload: React.FC = () => {
                     ) : (
                         comments.map(comment => (
                             <div key={comment.id} className="bg-gray-100 p-3 mb-3 border border-gray-200 rounded-lg">
-                                <strong style={{ color: comment.color }}>Comment {comment.id}:</strong> {comment.text}
-                                <br />
+                                <strong style={{ color: "black" }}>Comment {comment.id}:</strong>
+                                {/* Change comment text color to black */}
+                                <p className="text-black">{comment.text}</p>
                                 <span className="text-gray-500 text-sm">
                   Position: {comment.start} - {comment.end}
                 </span>
@@ -269,7 +284,7 @@ const FileUpload: React.FC = () => {
                             </button>
                             <button
                                 onClick={addComment}
-                                className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
+                                className="bg-black text-white py-2 px-4 rounded-lg hover:bg-zinc-800"
                             >
                                 Add Comment
                             </button>
