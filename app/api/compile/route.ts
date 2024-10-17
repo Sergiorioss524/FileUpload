@@ -45,6 +45,9 @@ ${latexCode}
         });
     } catch (error) {
         console.error('Error in API route:', error);
-        return new Response(`An error occurred while generating the PDF: ${error.message}`, { status: 500 });
-    }
-}
+        if (error instanceof Error) {
+            return new Response(`An error occurred while generating the PDF: ${error.message}`, { status: 500 });
+        } else {
+            return new Response('An unexpected error occurred', { status: 500 });
+        }
+    }}
