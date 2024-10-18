@@ -523,7 +523,7 @@ const FileUpload: React.FC = () => {
                                             </div>
                                         </MathJaxComponent>
                                     </MathJaxContext>
-                                    <Tooltip id="comment-tooltip" place="top" effect="solid" />
+                                    <Tooltip id="comment-tooltip" place="top" />
                                 </div>
 
                                 {/* Download as PDF Button */}
