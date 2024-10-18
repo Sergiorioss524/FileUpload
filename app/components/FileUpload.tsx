@@ -134,7 +134,7 @@ const FileUpload: React.FC = () => {
     const handlePreviewSelection = () => {
         const selectionObj = window.getSelection();
         if (selectionObj && selectionObj.rangeCount > 0 && selectionObj.toString().length > 0) {
-            const selectedText = selectionObj.toString();
+            selectionObj.toString();
             const range = selectionObj.getRangeAt(0);
 
             const startNode = range.startContainer;
