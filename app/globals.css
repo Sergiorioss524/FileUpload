@@ -23,6 +23,6 @@ body {
 
 @layer utilities {
   .text-balance {
-    text-wrap: balance;
+    overflow-wrap: break-word; /* Allows words to break to the next line */
   }
 }
