@@ -25,6 +25,7 @@ ${latexCode}
         const apiUrl = `https://latexonline.cc/compile?text=${encodedLatex}`;
 
         // Fetch the compiled PDF from the third-party service
+
         const response = await fetch(apiUrl);
 
         if (!response.ok) {
