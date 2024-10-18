@@ -55,7 +55,7 @@ const FileUpload: React.FC = () => {
     // Helper function to calculate the character index from the start of the container to the selection point
     const getCharacterIndex = (node: Node, offset: number, container: Node): number => {
         let index = 0;
-        const treeWalker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
+        const treeWalker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
         while (treeWalker.nextNode()) {
             const currentNode = treeWalker.currentNode;
             if (currentNode === node) {
@@ -67,6 +67,7 @@ const FileUpload: React.FC = () => {
         }
         return index;
     };
+
 
     // Function to check for overlapping comments
     const isOverlapping = (newStart: number, newEnd: number, comments: Comment[]): boolean => {
@@ -363,7 +364,8 @@ const FileUpload: React.FC = () => {
     // Use effect to hide popup when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+            const currentPopup = popupRef.current;
+            if (currentPopup && !currentPopup.contains(event.target as Node)) {
                 setPopup({ visible: false, x: 0, y: 0 });
                 setSelection(null);
             }
@@ -375,6 +377,7 @@ const FileUpload: React.FC = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [popup.visible]);
+
 
     // Function to render the preview content with highlights
     const renderPreviewContent = () => {
